@@ -5,6 +5,9 @@ inputs:
   secrets:
     required: true
     description: JSON representation of the secrets, use provided placeholder'
+  vars:
+    required: false
+    description: JSON representation of the environment variables, use provided placeholder'
   prefix:
     required: false
     description: 'Prefix to add to all secrets, e.g.: SECRET_'
@@ -17,6 +20,9 @@ inputs:
   convert:
     required: false
     description: 'Converts secrets name to a specific string format'
+  output:
+    required: false
+    description: 'Outputs the environment variables in a file (like .env) for use within the action only'
 runs:
   using: 'node16'
   main: 'dist/index.js'
