@@ -92,9 +92,13 @@ with:
       core.exportVariable(newKey, secrets[key])
       core.info(`Exported secret ${newKey}`)
       if (output) {
-        appendFile(output, `\n${newKey}="${secrets[key]}"`, err => {
-          if (err) throw err
-        })
+        appendFile(
+          output,
+          `\n${newKey}=${secrets[key].replace(/[\r\n]+/gm, '')}`,
+          err => {
+            if (err) throw err
+          }
+        )
       }
     }
   } catch (error) {
