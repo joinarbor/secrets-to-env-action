@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import {appendFile} from 'fs'
 
 import {camelCase} from 'camel-case'
 import {constantCase} from 'constant-case'
@@ -24,14 +25,21 @@ async function run(): Promise<void> {
     const secretsJson: string = core.getInput('secrets', {
       required: true
     })
+    const varsJson: string = core.getInput('vars')
     const keyPrefix: string = core.getInput('prefix')
     const includeListStr: string = core.getInput('include')
     const excludeListStr: string = core.getInput('exclude')
     const convert: string = core.getInput('convert')
+    const output: string = core.getInput('output')
 
     let secrets: Record<string, string>
+    let vars: Record<string, string>
     try {
       secrets = JSON.parse(secretsJson)
+      vars = JSON.parse(varsJson)
+      if (vars) {
+        secrets = {...secrets, ...vars}
+      }
     } catch (e) {
       throw new Error(`Cannot parse JSON secrets.
 Make sure you add the following to this action:
@@ -83,6 +91,11 @@ with:
 
       core.exportVariable(newKey, secrets[key])
       core.info(`Exported secret ${newKey}`)
+      if (output) {
+        appendFile(output, `${newKey}=${secrets[key]}`, err => {
+          if (err) throw err
+        })
+      }
     }
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)

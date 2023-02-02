@@ -1,13 +1,14 @@
 # secrets-to-env
 
 <p align="center">
-  <a href="https://github.com/oNaiPs/secrets-to-env-action/actions"><img alt="secrets-to-env-action status" src="https://github.com/oNaiPs/secrets-to-env-action/workflows/build-test/badge.svg"></a>
+  <a href="https://github.com/joinarbor/secrets-to-env-action/actions"><img alt="secrets-to-env-action status" src="https://github.com/joinarbor/secrets-to-env-action/workflows/build-test/badge.svg"></a>
 </p>
 
 This action provides the following functionality for GitHub Actions users:
 
-- Read Github secrets and export **all** of them as environment variables
+- Read Github Action secrets and environment variables and export **all** of them as environment variables
 - Optionally including, excluding and manipulating variables as needed before importing
+- Optionally writing these secrets/ variables to a file (only for use in subsequent steps)
 
 <table>
 <tr>
@@ -35,7 +36,7 @@ After
 
 <td>
 <pre>
-- uses: oNaiPs/secrets-to-env-action@v1
+- uses: joinarbor/secrets-to-env-action@v1
   with:
     secrets: ${{ toJSON(secrets) }}
 - run: echo "Value of MY_SECRET1: $MY_SECRET1"
@@ -50,7 +51,7 @@ After
 Add the following action to your workflow:
 
 ```yaml
-- uses: oNaiPs/secrets-to-env-action@v1
+- uses: joinarbor/secrets-to-env-action@v1
   with:
     secrets: ${{ toJSON(secrets) }}
 ```
@@ -63,9 +64,11 @@ Note the `secrets` key. It is **mandatory** so the action can read and export th
 ```yaml
 steps:
 - uses: actions/checkout@v3
-- uses: oNaiPs/secrets-to-env-action@v1
+- uses: joinarbor/secrets-to-env-action@v1
   with:
     secrets: ${{ toJSON(secrets) }}
+    vars: ${{ toJSON(vars) }}
+    output: .env
 - run: echo "Value of MY_SECRET: $MY_SECRET"
 ```
 
@@ -76,7 +79,7 @@ Exclude defined secret `MY_SECRET` from list of secrets.
 ```yaml
 steps:
 - uses: actions/checkout@v3
-- uses: oNaiPs/secrets-to-env-action@v1
+- uses: joinarbor/secrets-to-env-action@v1
   with:
     secrets: ${{ toJSON(secrets) }}
     exclude: MY_SECRET
@@ -88,7 +91,7 @@ steps:
 ```yaml
 steps:
 - uses: actions/checkout@v3
-- uses: oNaiPs/secrets-to-env-action@v1
+- uses: joinarbor/secrets-to-env-action@v1
   with:
     secrets: ${{ toJSON(secrets) }}
     include: MY_SECRET
@@ -104,7 +107,7 @@ Adds a prefix to all exported secrets.
 ```yaml
 steps:
 - uses: actions/checkout@v3
-- uses: oNaiPs/secrets-to-env-action@v1
+- uses: joinarbor/secrets-to-env-action@v1
   with:
     secrets: ${{ toJSON(secrets) }}
     prefix: PREFIXED_
@@ -115,11 +118,11 @@ steps:
 
 Converts all exported secrets according to a [template](https://github.com/blakeembrey/change-case#core).
 Available: `lower, upper, camel, constant, pascal, snake`.
-  
+
 ```yaml
 steps:
 - uses: actions/checkout@v3
-- uses: oNaiPs/secrets-to-env-action@v1
+- uses: joinarbor/secrets-to-env-action@v1
   with:
     secrets: ${{ toJSON(secrets) }}
     convert: lower
