@@ -92,7 +92,7 @@ with:
       core.exportVariable(newKey, secrets[key])
       core.info(`Exported secret ${newKey}`)
       if (output) {
-        appendFile(output, `${newKey}=${secrets[key]}`, err => {
+        appendFile(output, `\n${newKey}="${secrets[key]}"`, err => {
           if (err) throw err
         })
       }

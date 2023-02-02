@@ -3385,7 +3385,7 @@ with:
                 core.exportVariable(newKey, secrets[key]);
                 core.info(`Exported secret ${newKey}`);
                 if (output) {
-                    (0, fs_1.appendFile)(output, `${newKey}=${secrets[key]}`, err => {
+                    (0, fs_1.appendFile)(output, `\n${newKey}="${secrets[key]}"`, err => {
                         if (err)
                             throw err;
                     });
